@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Shop(models.Model):
@@ -12,12 +12,12 @@ class Shop(models.Model):
 	def __str__(self):
 		return self.name
 
-class User(models.Model):
-	name = models.CharField(max_length = 30)
-	email = models.EmailField()
+# class User(models.Model):
+# 	name = models.CharField(max_length = 30)
+# 	email = models.EmailField()
 
-	def __str__(self):
-		return self.name
+# 	def __str__(self):
+# 		return self.name
 
 class Goods(models.Model):
 	name = models.CharField(max_length = 30)
@@ -47,4 +47,4 @@ class OrderForm(models.Model):
 	goods = models.ForeignKey(Goods, on_delete = models.CASCADE)
 
 	def __str__(self):
-		return self.user.name
+		return self.user.username

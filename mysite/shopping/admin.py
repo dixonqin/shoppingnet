@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import User, Shop, Goods, Comment, ShoppingCart, OrderForm
+from .models import Shop, Goods, Comment, ShoppingCart, OrderForm
 
-admin.site.register(User)
+# admin.site.register(User)
 admin.site.register(Shop)
 admin.site.register(Goods)
 admin.site.register(Comment)

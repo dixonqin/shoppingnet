@@ -1,12 +1,12 @@
-
+{% extends "base.html" %}
 {% block content %}
 
-<h2>the order of {{user_order.name}}</h2>
+<h2>the order of {{user_order.username}}</h2>
 
 <ul>
 	{% for order in user_order.orderform_set.all %}
 	<li>
-		<p>number: {{order.number}} </p>
+		<a href= "{{order.id}} " > goods: {{order.goods.name}} </a>
 		<p>goods: {{order.goods.name}} </p>
 		<p>shop: {{order.goods.shop.name}} </p>
 	</li>
