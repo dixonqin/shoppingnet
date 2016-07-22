@@ -1,0 +1,16 @@
+
+{% block content %}
+
+<h2>the order of {{user_order.name}}</h2>
+
+<ul>
+	{% for order in user_order.orderform_set.all %}
+	<li>
+		<p>number: {{order.number}} </p>
+		<p>goods: {{order.goods.name}} </p>
+		<p>shop: {{order.goods.shop.name}} </p>
+	</li>
+	{% endfor %}
+</ul>
+
+{% endblock %}

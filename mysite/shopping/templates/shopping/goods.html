@@ -1,0 +1,10 @@
+<h2>goods page</h2>
+
+<p>name: {{goods.name}} </p>
+<p>price: {{goods.price}} </p>
+<hr>
+<form method="POST">
+	{%csrf_token%}
+	{{form.as_p}}
+	<button type="submit">buy it</button>
+</form>

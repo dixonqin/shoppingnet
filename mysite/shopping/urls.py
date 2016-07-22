@@ -1,16 +1,26 @@
 from django.conf.urls import url
-
-from . import views
-from shopping.views import ShopList
+from shopping.views import ShopList, ShopDetail, GoodsDetail, UserOrderForm, UserShoppingCart
+from shopping import views
 
 urlpatterns = [
+	# 商店列表，购物网站的首页
 	# ex: /shopping/
-    url(r'^$', ShopList.as_view()),
+    url(r'^$', ShopList.as_view(), name = "index"),
+    # 某个商店，主要内容为商品列表
     # ex: /shopping/5/
-    url(r'^(?P<shop_id>[0-9]+)/$', views.shop_detail, name='shop_detail'),
-    # ex: /shopping/5/goods/
-    url(r'^(?P<shop_id>[0-9]+)/goods/(?P<goods_id>[0-9]+)/$', views.shop_goods, name='shop_goods'),
-    # ex: /shopping/5/buy/
-    url(r'^(?P<shop_id>[0-9]+)/buy/(?P<goods_id>[0-9]+)/$', views.shop_buy, name='shop_buy'),
+    url(r'^(?P<pk>[0-9]+)/$', ShopDetail.as_view()),
+    # 某个商品的详细信息
+    # ex: shopping/goods/2
+    url(r'^goods/(?P<goods_id>[0-9]+)/$', views.GoodsDetail),
+    # 显示用户历史记录的页面, 里面可以评分...
+    # ex: /user/5/order
+    url(r'^user/(?P<pk>[0-9]+)/order/$', UserOrderForm.as_view()),
+    # 显示用户购物车的页面
+    # ex: /user/5/cart
+    url(r'^user/(?P<pk>[0-9]+)/cart/$', UserShoppingCart.as_view()),
+
+    #url(r'^order/(?P<order_id>[0-9]+)/$', views.OrderFormDetail,
+
+    url(r'^user/[0-9]+/cart/(?P<cart_id>[0-9]+)/$', views.UserShoppingCartDetail),
 ]
 

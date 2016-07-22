@@ -1,7 +1,17 @@
-
+{% extends "base.html" %}
+{% block content %}
 <h2>Shop List</h2>
 <ul>
 	{% for shop in index_shop_List %}
-		<li> {{shop.name}} </li>
+		<li> <a href="/{{shop.id}}/"> {{shop.name}} </a> </li>
+		<ul>
+			<li> {{ shop.category }} </li>
+		</ul>
 	{% endfor %}
 </ul>
+{% endblock %}
+
+{% block footer %}
+<a href="/user/1/order/">history orders</a>
+<a href="/user/1/cart/">shopping cart</a>
+{% endblock %}
