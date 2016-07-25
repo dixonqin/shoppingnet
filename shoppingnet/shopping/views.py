@@ -24,7 +24,7 @@ def ShopList(request):
 def toUserOrder(request):
 	model = get_user_model()
 	context_object_name = "user_order"
-	template_name = "shopping/user_order.html"
+	template_name = "shopping/user_order_list.html"
 
 	def get_context_data(self, **kwargs):
 		context = super(UserOrderForm, self).get_context_data(**kwargs)
@@ -128,3 +128,8 @@ def UserOrderFormDetail(request, order_id):
 	return render(request, 'shopping/order.html', context)
 
 
+#edit at 7/25 by Dixon
+
+
+
+#edit 7/25 done
