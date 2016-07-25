@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>form order {{order.id}} page</h2>
+
+<p>goods: {{order.goods.name}} </p>
+<p>number: {{order.number}} </p>
+
+<form method="POST">
+{% csrf_token %}
+	<input type="text" name="rating">
+	<input type="text" name="content">
+	<button type="submit" name = "comment">comment</button>
+	<button type="submit" name = "delete">delete</button>
+</form>
+
+{% endblock %}

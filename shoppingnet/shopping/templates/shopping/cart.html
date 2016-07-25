@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>shopping cart {{cart.id}} page</h2>
+
+<p>goods: {{cart.goods.name}} </p>
+<p>number: {{cart.number}} </p>
+
+<form method="POST">
+{% csrf_token %}
+	<button type="submit" name = "buy">buy</button>
+	<button type="submit" name = "delete">delete</button>
+</form>
+
+{% endblock %}
