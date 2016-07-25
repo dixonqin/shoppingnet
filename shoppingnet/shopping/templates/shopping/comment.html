@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>comment page</h2>
+<p>goods: {{comment.goods.name}} </p>
+<ul>
+	{% for comment in goods_comment_list.comment_set.all %}
+		<p>user: {{comment.user.name}} </p>
+		<p>rating: {{comment.rating}}</p>
+		<p>comment: {{comment.content}}</p>
+	{% endfor %}
+</ul>
+
+{% endblock %}

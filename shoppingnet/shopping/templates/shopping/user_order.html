@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>the order of {{user_order.username}}</h2>
+
+<ul>
+	{% for order in user_order.orderform_set.all %}
+	<li>
+		<a href= "{{order.id}} " > goods: {{order.goods.name}} </a>
+		<p>goods: {{order.goods.name}} </p>
+		<p>shop: {{order.goods.shop.name}} </p>
+	</li>
+	{% endfor %}
+</ul>
+
+{% endblock %}

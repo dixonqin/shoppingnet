@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>the shopping cart of {{user_cart.username}}</h2>
+
+<ul>
+	{% for cart in user_cart.shoppingcart_set.all %}
+	<li>
+		<a href= "{{cart.id}} " > goods: {{cart.goods.name}} </a>
+		<p>number: {{cart.number}} </p>
+		<p>shop: {{cart.goods.shop.name}} </p>
+	</li>
+	{% endfor %}
+</ul>
+
+{% endblock %}
