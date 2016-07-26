@@ -1,25 +1,57 @@
-from shopping.forms import GoodsForm, ManageGoodsForm
-from django import forms
-from django.http import HttpResponse, HttpResponseRedirect
+from shopping.forms import GoodsForm, ManageGoodsForm, ShopInfoForm
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
 from shopping.models import Goods, Shop, OrderForm, ShoppingCart, Comment
-from django.contrib.auth import get_user_model
-from django.db import models
-# Create your views here.
 
-def ShopList(request):
+
+def HomePage(request):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/register/')
+
+	if request.user.is_complete == False and request.user.is_shop == True:
+		return HttpResponseRedirect('/shop_info/')
+
+	if request.user.is_complete == False and request.user.is_shop == False:
+		return HttpResponseRedirect('/user_info/')
 
 	if request.user.is_shop == True:
 		return HttpResponseRedirect('/shop/' + str(request.user.shop.id))
 
-	queryset = Shop.objects.order_by("id")
+	index_shop_List = Shop.objects.order_by("id")
 	context = {
-		'index_shop_List' : queryset,
+		'index_shop_List' : index_shop_List,
 	}
 	return render(request, 'shopping/index.html', context)
+
+def CompleteUserInfo(request):
+	context = {
+		#
+		#
+		#   TODO
+		#
+		#
+	}
+	return render(request, 'shopping/user_info.html', context)
+
+def CompleteShopInfo(request):
+	if request.method == "POST":
+		form = ShopInfoForm(request.POST)
+		if form.is_valid():
+			if 'submit' in request.POST:
+				temp = Shop()
+				temp = form.save(commit=False)
+				request.user.is_complete = True
+				temp.user = request.user
+				temp.save()
+				request.user.save()
+				return HttpResponseRedirect('/')
+	else:
+		form = ShopInfoForm()
+	context = {
+		'form': form,
+	}
+	return render(request, 'shopping/shop_info.html', context)
+
 
 def ShopDetail(request, shop_id):
 	shop = Shop.objects.get(pk = shop_id)

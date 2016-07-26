@@ -1,14 +1,20 @@
 from django.conf.urls import url
-from shopping.views import ShopList, ShopDetail, GoodsDetail, UserOrderForm, UserShoppingCart, ShopDetail, ManageShop, ManageGoods, AddGoods
+from shopping.views import HomePage, ShopDetail, GoodsDetail, UserOrderForm, UserShoppingCart, ShopDetail, ManageShop, ManageGoods, AddGoods, CompleteUserInfo, CompleteShopInfo
 from shopping import views
 
 urlpatterns = [
 	# 商店列表，购物网站的首页
 	# ex: /shopping/
-    url(r'^$', views.ShopList, name = "index"),
+    url(r'^$', views.HomePage, name = "index"),
     # 某个商店，主要内容为购物进入某店时，商品列表
     # ex: /shopping/5/
     url(r'^(?P<shop_id>[0-9]+)/$', views.ShopDetail),
+    #
+    #完善商店信息
+    url(r'^shop_info/$', views.CompleteShopInfo),
+    #
+    #完善商品信息
+    url(r'^user_info/$', views.CompleteUserInfo),
     #
     # 某个商店，主要为店主直接修改某些商品信息
     url(r'^shop/(?P<shop_id>[0-9]+)/$', views.ManageShop),
