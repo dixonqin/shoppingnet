@@ -3,6 +3,8 @@ from django.conf import settings
 
 # Create your models here.
 class Shop(models.Model):
+
+	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='')
 	name = models.CharField(max_length = 30)
 	category = models.CharField(max_length = 30)
 
@@ -12,20 +14,21 @@ class Shop(models.Model):
 	def __str__(self):
 		return self.name
 
-# class User(models.Model):
-# 	name = models.CharField(max_length = 30)
-# 	email = models.EmailField()
-
-# 	def __str__(self):
-# 		return self.name
-
 class Goods(models.Model):
-	name = models.CharField(max_length = 30)
 	shop = models.ForeignKey(Shop, on_delete = models.CASCADE)
+	#以下商品信息，店主无法直接修改
+	name = models.CharField(max_length = 30)
+	category = models.CharField(max_length = 20, default="")
+	description = models.CharField(max_length = 200, default="")
 	price = models.IntegerField(default = 0)
+	number = models.IntegerField(default = 0)
+	#以下信息，店主无法修改
+	sold_number = models.IntegerField(default = 0)
+	rating = models.IntegerField(default = 5, editable = 'false')
+	rating_number = models.IntegerField(default = 0, editable = 'false')
 
 	def __str__(self):
-		return self.name
+		return str(self.name)+'+'+str(self.id)
 
 class Comment(models.Model):
 	rating = models.IntegerField(default = 0)

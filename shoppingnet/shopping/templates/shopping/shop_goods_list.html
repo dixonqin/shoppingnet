@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Goods list for shop {{ shop.id }} </h2>
+
+<h3>name: {{shop.name}} </h3>
+<h3>category: {{shop.category}} </h3>
+
+<ul>
+	{% for goods in shop.goods_set.all %}
+		<li><a href="/shop/goods/{{goods.id}}/">
+			{{goods.name}}
+		</a></li>
+	{% endfor %}
+</ul>
+
+{% endblock %}
