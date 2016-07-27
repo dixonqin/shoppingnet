@@ -1,0 +1,23 @@
+<!--7/25 by Dixon-->
+{% extends "base.html" %}
+{% block content %}
+
+{% if user.is_shop %}
+	<p>name: {{user.shop.name}}</p><br>
+	<p>email: {{user.email}}</p><br>
+	<p>category: {{user.shop.category}}</p><br>
+	<p>address: {{user.shop.address}}</p><br>
+	<p>description: {{user.shop.description}}</p><br>
+{% else %}
+	<p>name: {{user.customer.name}}</p>
+	<p>email: {{user.email}}</p>
+	<p>sex: {{user.customer.sex}}</p>
+	<p>tel: {{user.customer.tel}}</p>
+	<p>address: {{user.customer.address}}</p>
+	<p>selfIntro: {{user.customer.selfIntro}}</p>
+{% endif %}
+<hr />
+{% csrf_token %}
+	<button type="submit" name = "changeInfo">修改信息</button>
+{% endblock %}
+<!--7/25 by Dixon done-->
