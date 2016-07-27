@@ -1,16 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>the order of {{user_order.username}}</h2>
+<h2>form order {{order.id}} page</h2>
 
-<ul>
-	{% for order in user_order.orderform_set.all %}
-	<li>
-		<a href= "{{order.id}} " > goods: {{order.goods.name}} </a>
-		<p>goods: {{order.goods.name}} </p>
-		<p>shop: {{order.goods.shop.name}} </p>
-	</li>
-	{% endfor %}
-</ul>
+<p>商品名称: {{order.goods.name}} </p>
+<p>数量: {{order.number}} </p>
+<p>卖家: {{order.goods.shop.name}}</p>
+<p>收货地址: {{order.address}}</p>
+<p>联系方式: {{order.tel}}</p>
+{% if order.status == 1 %}
+	<p>{% trans "status: 已下单" %}</p>
+
+{% elif order.status == 2 %}
+	<p>{% trans "status: 已确认订单" %}</p>
+
+{% elif order.status == 3 %}
+	<p>{% trans "status: 已发货" %}</p>
+
+{% elif order.status == 4 %}
+	<p>{% trans "status: 已确认收货"%}</p>
+{% endif %}
+<p>留言: {{order.message}}</p>
+<form method="POST">
+{% csrf_token %}
+	<button type="submit" name = "delete">删除</button>
+	{% if order.status == 3 %}
+		<button type="submit" name = "comfirm">{% trans "status: 确认收货"%}</button>
+	{% endif %}
+	<hr/>
+	{% if order.status == 4 %}
+	(<input type="text" name="rating">
+	<input type="text" name="content">
+	<button type="submit" name = "comment">{% trans "评价" %}</button>)
+	{% endif %}
+</form>
 
 {% endblock %}

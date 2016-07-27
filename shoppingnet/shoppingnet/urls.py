@@ -30,5 +30,4 @@ urlpatterns = [
     ),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'', include('shopping.urls')),
-    #url(r'^shopping/', include('shopping.urls')),
 ]

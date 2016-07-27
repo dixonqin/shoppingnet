@@ -128,3 +128,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'customauth.MyUser'
+
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = '/media/'

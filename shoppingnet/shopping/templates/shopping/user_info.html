@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>用户信息完善</h2>
+
+<hr>
+<form method="POST">
+{% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit" name = "submit">提交</button>
+</form>
+{% endblock %}

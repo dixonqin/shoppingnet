@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>the order of {{user_order.username}}</h2>
+
+<ul>
+	{% for order in user_order.orderform_set.all %}
+	<li>
+		<a href= "{{order.id}} " > goods: {{order.goods.name}} </a>
+		<p>goods: {{order.goods.name}} </p>
+		<p>shop: {{order.goods.shop.name}} </p>
+		{% if order.status == 1 %}
+			<p>status: 已下单</p>
+
+		{% elif order.status == 2 %}
+			<p>status: 已确认订单</p>
+
+		{% elif order.status == 3 %}
+			<p>status: 已发货</p>
+
+		{% elif order.status == 4 %}
+			<p>status: 已确认收货</p>
+		{% endif %}
+	</li>
+	{% endfor %}
+</ul>
+
+{% endblock %}
