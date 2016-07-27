@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from registration.forms import RegistrationForm
 from customauth.models import MyUser
-from shopping.models import Goods, Shop
+from shopping.models import Goods, Shop, Customer, OrderForm, Comment
 from django.utils.translation import ugettext_lazy as _
 
 class MyCustomUserForm(RegistrationForm):
@@ -50,3 +50,35 @@ class ShopInfoForm(forms.ModelForm):
 			'description':_("描述"),
 		}
 
+class CustomerForm(forms.ModelForm):
+	class Meta:
+		model = Customer
+		exclude = ['user',]
+		labels = {
+			#'head_img':_("头像"),
+			'name':_("姓名"),
+			'sex':_("性别"),
+			'self_intro':_("个人简介"),
+			'address':_("地址"),
+			'tele':_("联系方式")
+		}
+
+class UserOrderForm(forms.ModelForm):
+	class Meta:
+		model = OrderForm
+		fields = ['number', 'message', 'tele', 'address', ]
+		labels = {
+			'number':_("数量"),
+			'message':_("附加信息"),
+			'tele':_("联系方式"),
+			'address':_("收货地址"),
+		}
+
+class CommentForm(forms.ModelForm):
+	class Meta:
+		model = Comment
+		fields = ['rating', 'content',]
+		labels = {
+			'rating':_("评分"),
+			'content':_('评价'),
+		}

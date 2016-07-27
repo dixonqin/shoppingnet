@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from datetime import datetime   
 
 # Create your models here.
 class Shop(models.Model):
@@ -11,6 +12,17 @@ class Shop(models.Model):
 	class Meta:
 		ordering = ["-name"]
 
+	def __str__(self):
+		return self.name
+
+class Customer(models.Model):
+	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, default = '')
+	name = models.CharField(max_length = 20, default="")
+	address = models.CharField(max_length = 200, default="")
+	sex = models.CharField(max_length = 10, default="")
+	self_intro = models.CharField(max_length = 300, default="")
+	tele = models.IntegerField(default = 0)
+	
 	def __str__(self):
 		return self.name
 
@@ -31,23 +43,30 @@ class Goods(models.Model):
 		return str(self.name)+'+'+str(self.id)
 
 class Comment(models.Model):
-	rating = models.IntegerField(default = 0)
-	content = models.TextField(max_length = 200)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
 	goods = models.ForeignKey(Goods, on_delete = models.CASCADE)
+
+	rating = models.IntegerField(default = 0)
+	content = models.TextField(max_length = 200)
+
+	date = models.DateTimeField(default = datetime.now) 
 
 	def __str__(self):
 		return self.content
 
-class ShoppingCart(models.Model):
-	number = models.IntegerField(default = 0)
+class OrderForm(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
 	goods = models.ForeignKey(Goods, on_delete = models.CASCADE)
 
-class OrderForm(models.Model):
 	number = models.IntegerField(default = 0)
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
-	goods = models.ForeignKey(Goods, on_delete = models.CASCADE)
+	message = models.CharField(max_length = 200, default="")
+	address = models.CharField(max_length = 200, default="")
+	tele = models.IntegerField(default = 0)
+	#1	下单 
+	#2	确认
+	#3	发货
+	#4	收货
+	status = models.IntegerField(default = 0)
 
 	def __str__(self):
-		return self.user.username
+		return self.user.customer.name

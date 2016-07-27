@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>订单管理</h2>
+<h3>以下是订单列表</h3>
+
+<ul>
+	{% for goods in shop.goods_set.all %}
+	<li>
+		{% for order in goods.orderform_set.all %}
+		<li>
+			<p>商品 {{goods.name}}</p>
+			<p>数量 {{order.number}} </p>
+			<p>状态: {{order.status}} </p>
+			<a href= "{{order.id}}">更多信息</a>
+		</li>
+		{% endfor %}
+	</li>
+	{% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,7 +1,7 @@
-from shopping.forms import GoodsForm, ManageGoodsForm, ShopInfoForm
+from shopping.forms import GoodsForm, ManageGoodsForm, ShopInfoForm, CustomerForm, UserOrderForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from shopping.models import Goods, Shop, OrderForm, ShoppingCart, Comment
+from shopping.models import Goods, Shop, OrderForm, Comment, Customer
 
 
 def HomePage(request):
@@ -24,12 +24,21 @@ def HomePage(request):
 	return render(request, 'shopping/index.html', context)
 
 def CompleteUserInfo(request):
+	if request.method == "POST":
+		form = CustomerForm(request.POST)
+		if form.is_valid():
+			if 'submit' in request.POST:
+				temp = Shop()
+				temp = form.save(commit=False)
+				request.user.is_complete = True
+				temp.user = request.user
+				temp.save()
+				request.user.save()
+				return HttpResponseRedirect('/')
+	else:
+		form = CustomerForm()
 	context = {
-		#
-		#
-		#   TODO
-		#
-		#
+		'form': form,
 	}
 	return render(request, 'shopping/user_info.html', context)
 
@@ -70,25 +79,26 @@ def ManageShop(request, shop_id):
 def GoodsDetail(request, goods_id):
 	goods = Goods.objects.get(pk = goods_id)
 	if request.method == 'POST':
-		form = GoodsForm(request.POST)
+		form = UserOrderForm(request.POST)
 		if form.is_valid():
-			number = form.cleaned_data['number']
 			if 'buy' in request.POST:
 				of = OrderForm()
-				of.user = request.user
+				of = form.save(commit=False)
 				of.goods = goods
-				of.number = number
+				of.user = request.user
+				of.status = 1
 				of.save()
-				return HttpResponseRedirect('/order')
+				return HttpResponseRedirect('/user_order/')
 			if 'collect' in request.POST:
-				sc = ShoppingCart()
-				sc.user = request.user
-				sc.goods = goods
-				sc.number = number
-				sc.save()
-				return HttpResponseRedirect('/cart')
+				of = OrderForm()
+				of = form.save(commit=False)
+				of.goods = goods
+				of.user = request.user
+				of.status = -1
+				of.save()
+				return HttpResponseRedirect('/cart/')
 	else:
-		form = GoodsForm()
+		form = UserOrderForm()
 
 	context = {
         'goods': goods,
@@ -96,10 +106,10 @@ def GoodsDetail(request, goods_id):
     }
 	return render(request, 'shopping/goods.html', context)
 
-############################################################################
-
 def ManageGoods(request, goods_id):
 	goods = Goods.objects.get(pk = goods_id)
+	message = '请在表单中修改'
+
 	if request.method == 'POST':
 		form = ManageGoodsForm(request.POST, instance = goods)
 		if form.is_valid():
@@ -110,51 +120,67 @@ def ManageGoods(request, goods_id):
 			if 'save' in request.POST:
 				form.save()
 				form = ManageGoodsForm(instance= goods)
+				message = '成功修改！'
 	else:
 		form = ManageGoodsForm(instance = goods)
 
 	context = {
         'goods': goods,
         'form' : form,
+        'message' : message, 
     }
-	return render(request, 'shopping/shop_manage_goods.html', context)
+	return render(request, 'shopping/shop_goods.html', context)
 
 def AddGoods(request):
-	return HttpResponseRedirect('/shop/add_goods/')
-
-def UserOrderForm(request):
+	if request.method == "POST":
+		form = ManageGoodsForm(request.POST)
+		if form.is_valid():
+			if 'submit' in request.POST:
+				temp = Goods()
+				temp = form.save(commit=False)
+				temp.shop = request.user.shop
+				temp.save()
+				return HttpResponseRedirect('/')
+	else:
+		form = ManageGoodsForm()
 	context = {
-		"user_order" : request.user
+		'form': form,
 	}
-	return render(request, "shopping/user_order_list.html", context)
+	return render(request, "shopping/shop_add_goods.html", context)
 
 def UserShoppingCart(request):
+	user_cart = request.user.orderform_set.all().filter(status = -1)
 	context = {
-		"user_cart" : request.user
+		"user_cart" : user_cart,
 	}
 	return render(request, "shopping/user_cart_list.html", context)
 
-def UserShoppingCartDetail(request, cart_id):
-	cart = ShoppingCart.objects.get(pk = cart_id)
+def UserShoppingCartDetail(request, order_id):
+	order = OrderForm.objects.get(pk = order_id)
 	if request.method == "POST":
 		if 'buy' in request.POST:
-			of = OrderForm()
-			of.user = request.user
-			of.goods = cart.goods
-			of.number = cart.number
-			of.save()
+			order.status = 1
+			order.save()
 			return HttpResponseRedirect('/order')
 		if 'delete' in request.POST:
-			cart.delete()
+			order.delete()
 			return HttpResponseRedirect('/cart')
 	context = {
-		"cart" : cart
+		"order" : order
 	}
 
 	return render(request, 'shopping/cart.html', context)
 
+def UserOrder(request):
+	user_order = request.user.orderform_set.all().exclude(status = -1)
+	context = {
+		"user_order" : user_order,
+	}
+	return render(request, "shopping/user_order_list.html", context)
+
 def UserOrderFormDetail(request, order_id):
 	order = OrderForm.objects.get(pk = order_id)
+	message = "请进行操作"
 	if request.method == "POST":
 		if 'comment' in request.POST:
 			of = OrderForm()
@@ -165,15 +191,47 @@ def UserOrderFormDetail(request, order_id):
 			# return HttpResponseRedirect('/order')
 		if 'delete' in request.POST:
 			order.delete()
-			return HttpResponseRedirect('/order')
+			return HttpResponseRedirect('/user_order')
+		if 'confirm' in request.POST and order.status == 3:
+			order.status = 4
+			order.save()
+			message = '确认收货成功'
 	context = {
-		"order" : order
+		"order" : order,
+		'message' : message,
 	}
-	return render(request, 'shopping/order.html', context)
+	return render(request, 'shopping/user_order.html', context)
 
-# added at 7.25 16:03 
+def ShopOrder(request):
+	shop = request.user.shop
+	context = {	
+		'shop' : shop,
+	}
+	return render(request, "shopping/shop_order_list.html", context)
+
+def ShopOrderFormDetail(request, order_id):
+	order = OrderForm.objects.get(pk = order_id)
+	message = '请进行操作'
+
+	if request.method == 'POST':
+		if 'confirm' in request.POST and order.status == 1:
+			order.status = 2
+			order.save()
+			message = '成功确认订单'
+		if 'delivery' in request.POST and order.status == 2:
+			order.status = 3
+			order.save()
+			message = '成功发货'
+
+	context = {
+        'order': order,
+        'message' : message,
+	}
+	return render(request, 'shopping/shop_order.html', context)
 
 
-
-
-# added at 7.25 16:03 
+def InfoView(request):
+	if request.user.is_shop == True:
+		return HttpResponseRedirect('/shop_info/')
+	else:
+		return HttpResponseRedirect('/user_info/')

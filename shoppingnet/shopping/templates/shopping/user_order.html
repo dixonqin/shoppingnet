@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>购物车详情</h2>
+<h2>订单管理</h2>
 
 	<p>商品: {{order.goods.name}} </p>
 	<p>店铺: {{order.goods.shop.name}} </p>
@@ -12,8 +12,9 @@
 
 <form method="POST">
 {% csrf_token %}
-	<button type="submit" name = "buy">buy</button>
-	<button type="submit" name = "delete">delete</button>
+	<button type="submit" name = "comment">评论</button>
+	<button type="submit" name = "delete">删除订单</button>
+	<button type="submit" name = "confirm">确认收货</button>
 </form>
 
 {% endblock %}

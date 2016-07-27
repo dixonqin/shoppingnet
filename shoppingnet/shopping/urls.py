@@ -1,5 +1,7 @@
 from django.conf.urls import url
-from shopping.views import HomePage, ShopDetail, GoodsDetail, UserOrderForm, UserShoppingCart, ShopDetail, ManageShop, ManageGoods, AddGoods, CompleteUserInfo, CompleteShopInfo
+from shopping.views import HomePage, ShopDetail, GoodsDetail, UserOrder, UserShoppingCart, ShopDetail, ManageShop, ManageGoods, AddGoods
+from shopping.views import CompleteUserInfo, CompleteShopInfo, ShopOrder, ShopOrderFormDetail
+from shopping.views import InfoView
 from shopping import views
 
 urlpatterns = [
@@ -29,14 +31,19 @@ urlpatterns = [
     url(r'^shop/add_goods/$', views.AddGoods),
     # 显示用户历史记录的页面, 里面可以评分...
     # ex: /user/5/order
-    url(r'^order/$', views.UserOrderForm),
+    url(r'^user_order/$', views.UserOrder),
+
+    url(r'^user_order/(?P<order_id>[0-9]+)/$', views.UserOrderFormDetail),
     # 显示用户购物车的页面
     # ex: /user/5/cart
     url(r'^cart/$', views.UserShoppingCart),
 
-    url(r'^order/(?P<order_id>[0-9]+)/$', views.UserOrderFormDetail),
+    url(r'^cart/(?P<order_id>[0-9]+)/$', views.UserShoppingCartDetail),
 
-    url(r'^cart/(?P<cart_id>[0-9]+)/$', views.UserShoppingCartDetail),
+    url(r'^shop_order/$', views.ShopOrder),
 
+    url(r'^shop_order/(?P<order_id>[0-9]+)/$', views.ShopOrderFormDetail),
+
+    url(r'^info_view/$', views.InfoView, name = "info_view"),
 ]
 

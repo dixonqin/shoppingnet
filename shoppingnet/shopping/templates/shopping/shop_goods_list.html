@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Goods list for shop {{ shop.id }} </h2>
+<h2>商店管理界面</h2>
+<h2>No. {{shop.id}} </h2>
 
-<h3>name: {{shop.name}} </h3>
-<h3>category: {{shop.category}} </h3>
+<h3>店名 {{shop.name}} </h3>
+<h3>类别 {{shop.category}} </h3>
+<h3>描述 {{shop.description}} </h3>
 
 <ul>
 	{% for goods in shop.goods_set.all %}
@@ -12,5 +14,9 @@
 		</a></li>
 	{% endfor %}
 </ul>
+{% endblock %}
 
+{%block footer%}
+	<a href="/shop/add_goods/">添加商品</a>
+	<a href="/shop_order/">订单管理</a>
 {% endblock %}

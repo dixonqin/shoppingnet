@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Shop List</h2>
+<h2>商店列表</h2>
 <ul>
 	{% for shop in index_shop_List %}
 		<li> <a href="/{{shop.id}}/"> {{shop.name}} </a> </li>
 		<ul>
-			<li> {{ shop.category }} </li>
+			<li> 店名 {{shop.name}} </li>
+			<li> 类别 {{ shop.category }} </li>
+			<li> 描述 {{shop.description}} </li>
 		</ul>
 	{% endfor %}
 </ul>
 {% endblock %}
 
 {% block footer %}
-	<a href="/order">Order Form</a>
+	<a href="/user_order">查看订单</a>
 	<br>
-	<a href="/cart">Shopping cart</a>
+	<a href="/cart">购物车</a>
 {% endblock %}
