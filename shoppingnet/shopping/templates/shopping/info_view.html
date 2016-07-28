@@ -9,12 +9,13 @@
 	<p>address: {{user.shop.address}}</p><br>
 	<p>description: {{user.shop.description}}</p><br>
 {% else %}
+	<p>headImg: </p><img src="{{user.customer.head_img.url}}" width="100" height="100">
 	<p>name: {{user.customer.name}}</p>
 	<p>email: {{user.email}}</p>
 	<p>sex: {{user.customer.sex}}</p>
 	<p>tel: {{user.customer.tel}}</p>
 	<p>address: {{user.customer.address}}</p>
-	<p>selfIntro: {{user.customer.selfIntro}}</p>
+	<p>selfIntro: {{user.customer.self_intro}}</p>
 {% endif %}
 <hr />
 {% csrf_token %}

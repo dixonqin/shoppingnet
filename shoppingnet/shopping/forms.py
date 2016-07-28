@@ -23,9 +23,6 @@ class ManageGoodsForm(forms.ModelForm):
 			'description':_("描述"),
 			'price':_("价格"),
 			'number':_("数量"),
-			'sold_number':_("销量"),
-			'rating':_("评价"),
-			'rating_number':_("评价数"),
 		}
 		# help_texts = {
 		# 	'name':_("名称"),
@@ -47,8 +44,8 @@ class ShopInfoForm(forms.ModelForm):
 		labels = {
 			'name':_("名称"),
 			'category':_("类别"),
-			'description':_("描述"),
 			'tele':_("联系方式"),
+			'description':_("描述"),
 		}
 
 class CustomerForm(forms.ModelForm):
@@ -59,9 +56,9 @@ class CustomerForm(forms.ModelForm):
 			'head_img':_("头像"),
 			'name':_("姓名"),
 			'sex':_("性别"),
-			'self_intro':_("个人简介"),
+			'tele':_("联系方式"),
 			'address':_("地址"),
-			'tele':_("联系方式")
+			'self_intro':_("个人简介"),	
 		}
 
 class UserOrderForm(forms.ModelForm):
