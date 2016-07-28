@@ -5,10 +5,12 @@
 
 <hr>
 <p> {{message}} </p>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
 {% csrf_token %}
+	<section>
 	{{ form.as_p }}
 	<button type="submit" name = "delete">删除</button>
 	<button type="submit" name = "save">保存</button>
+	</section>
 </form>
 {% endblock %}

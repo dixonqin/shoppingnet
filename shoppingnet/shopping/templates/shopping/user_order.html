@@ -2,19 +2,50 @@
 {% block content %}
 
 <h2>订单管理</h2>
-
+	<section>
+	<img src="{{order.goods.image.url}}" width="100px" height="100px">
 	<p>商品: {{order.goods.name}} </p>
 	<p>店铺: {{order.goods.shop.name}} </p>
 	<p>数量: {{order.number}} </p>
-	<p>状态: {{order.status}} </p>
+	<p>单价: {{order.goods.price}}</p>
+	<p>总价: {{order.total_price}}</p>
+	{% if order.status == 1 %}
+		<p>状态: 已下单 </p>
+	{% elif order.status == 2 %}
+		<p>状态: 商家已确认 </p>
+	{% elif order.status == 3 %}
+		<p>状态: 商家已发货 </p>
+	{% elif order.status == 4 %}
+		<p>状态: 已确认收货 </p>
+	{% elif order.status == 5 %}
+		<p>状态: 已完成 </p>
+	{% else %}
+		<p>状态: 已取消 </p>
+	{% endif %}
 	<p>联系方式: {{order.tele}} </p>
 	<p>地址: {{order.address}}</p>
-
+	</section>
 <form method="POST">
+<section>
 {% csrf_token %}
-	<button type="submit" name = "comment">评论</button>
-	<button type="submit" name = "delete">删除订单</button>
+	{% if order.status == 1 %}
+	<button type="submit" name = "cancle">取消订单</button>
+	{% endif %}
+	{% if order.status == 3 %}
 	<button type="submit" name = "confirm">确认收货</button>
+	{% endif %}
+</section>
 </form>
+
+{% if order.status == 4 %}
+<form method="POST">
+<section>
+{% csrf_token %}
+	{{comment.as_p}}
+	<button type="submit" name = "comment">评论</button>
+	<p>注: 分数为5分制，大于5自动取5分，小于0自动取0分 </p>
+</section>
+</form>
+{% endif %}
 
 {% endblock %}

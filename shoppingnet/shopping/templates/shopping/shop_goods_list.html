@@ -5,13 +5,19 @@
 
 <h3>店名 {{shop.name}} </h3>
 <h3>类别 {{shop.category}} </h3>
+<h3>联系方式 {{shop.tele}}
 <h3>描述 {{shop.description}} </h3>
 
 <ul>
 	{% for goods in shop.goods_set.all %}
-		<li><a href="/shop/goods/{{goods.id}}/">
+	<section>
+		<li>
+		<img src="{{goods.image.url}}" width="100px" height="100px">
+		<a href="/shop/goods/{{goods.id}}/">
 			{{goods.name}}
 		</a></li>
+	</section>
+	<hr />
 	{% endfor %}
 </ul>
 {% endblock %}

@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>店铺信息完善</h2>
+<h2>店铺信息</h2>
 
-<hr>
+<p>销量: {{user.shop.sold_number}}</p>
+
 <form method="POST">
+<section>
 {% csrf_token %}
 	{{ form.as_p }}
 	<button type="submit" name = "submit">提交</button>
+</section>
 </form>
 {% endblock %}

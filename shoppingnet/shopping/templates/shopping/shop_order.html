@@ -2,19 +2,64 @@
 {% block content %}
 
 <h2>店铺订单管理</h2>
-
+<section>
 	<p>商品: {{order.goods.name}} </p>
 	<p>店铺: {{order.goods.shop.name}} </p>
 	<p>数量: {{order.number}} </p>
-	<p>状态: {{order.status}} </p>
+	<p>单价: {{order.goods.price}}</p>
+	<p>总价: {{order.total_price}}</p>
+	{% if order.status == 1 %}
+		<p>状态: 已下单 </p>
+	{% elif order.status == 2 %}
+		<p>状态: 商家已确认 </p>
+	{% elif order.status == 3 %}
+		<p>状态: 商家已发货 </p>
+	{% elif order.status == 4 %}
+		<p>状态: 已确认收货 </p>
+	{% elif order.status == 5 %}
+		<p>状态: 已完成 </p>
+	{% else %}
+		<p>状态: 已取消 </p>
+	{% endif %}
+	<p>买家: {{order.user.customer.name}} </p>
 	<p>联系方式: {{order.tele}} </p>
 	<p>地址: {{order.address}}</p>
-
+	{% if order.status == 5 %}
+		<p>用户评分: {{order.comment.rating}}</p>
+		<p>用户评论: {{order.comment.content}}</p>
+		<p> {{order.comment.date}}</p>
+		{% if order.comment.isReplied %}
+			{% for reply in order.comment.reply_set.all %}
+			<p>回复评分: {{reply.rating}}</p>
+			<p>回复评论: {{reply.content}}</p>
+			<p> {{reply.date}}</p>
+			{% endfor %}
+		{% endif %}
+	{% endif %}
+</section>
 <hr>
-<p> {{message}} </p>
+<form method="POST">
+<section>
+{% csrf_token %}
+	{% if order.status == 1 %}
+		<button type="submit" name = "confirm">确定订单</button>
+	{% endif %}
+	{% if order.status == 2 %}
+		<button type="submit" name = "delivery">已发货</button>
+	{% endif %}
+	<br>
+</form>
 <form method="POST">
 {% csrf_token %}
-	<button type="submit" name = "confirm">确定订单</button>
-	<button type="submit" name = "delivery">已发货</button>
+{% if order.status == 5 %}
+	{% if not order.comment.isReplied %}
+		<p>回复评论 </p>
+		{{ replyForm.as_p }}
+		<button type="submit" name = "reply">回复</button>
+	{% endif %}
+	<p>注: 分数为5分制，大于5自动取5分，小于0自动取0分 </p>
+{% endif %}
+</section>
 </form>
+
 {% endblock %}

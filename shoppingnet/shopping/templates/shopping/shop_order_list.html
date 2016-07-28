@@ -8,12 +8,30 @@
 	{% for goods in shop.goods_set.all %}
 	<li>
 		{% for order in goods.orderform_set.all %}
+		<section>
 		<li>
+			<img src="{{goods.image.url}}" width="100px" height="100px">
 			<p>商品 {{goods.name}}</p>
 			<p>数量 {{order.number}} </p>
-			<p>状态: {{order.status}} </p>
+			<p>单价: {{order.goods.price}}</p>
+			<p>总价: {{order.total_price}}</p>
+			{% if order.status == 1 %}
+				<p>状态: 已下单 </p>
+			{% elif order.status == 2 %}
+				<p>状态: 商家已确认 </p>
+			{% elif order.status == 3 %}
+				<p>状态: 商家已发货 </p>
+			{% elif order.status == 4 %}
+				<p>状态: 已确认收货 </p>
+			{% elif order.status == 5 %}
+				<p>状态: 已完成 </p>
+			{% else %}
+				<p>状态: 已取消 </p>
+			{% endif %}
 			<a href= "{{order.id}}">更多信息</a>
 		</li>
+		</section>
+		<hr />
 		{% endfor %}
 	</li>
 	{% endfor %}

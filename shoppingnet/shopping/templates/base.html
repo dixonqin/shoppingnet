@@ -1,37 +1,96 @@
+{% load staticfiles %}
 {% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="{{ STATIC_URL }}style.css" />
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/jquery.countdown.css">
+    <link href="/static/css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
     <meta charset="utf-8">
-    <title>{% block title %}User test{% endblock %}</title>
+    <title>{% block title %}GIFTY{% endblock %}</title>
+<!--     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <script type="text/javascript" src="static/js/jquery-1.11.1.min.js"></script>
+    <script src="static/js/jquery.easydropdown.js"></script>
+    <script type="text/javascript" src="static/js/megamenu.js"></script>
+    <script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+    <script src="static/js/responsiveslides.min.js"></script>
+    <script>
+        $(function () {
+            $("#slider").responsiveSlides({
+                auto: true,
+                nav: false,
+                speed: 500,
+                namespace: "callbacks",
+                pager: true,
+            });
+        });
+    </script>
+    <script src="static/js/jquery.countdown.js"></script>
+    <script src="static/js/script.js"></script> -->
 </head>
-
 <body>
-    <div id="header">
     {% block header %}
-    <a href="{% url 'index' %}">{% trans "主页" %}</a> | 
-
-    {% if user.is_authenticated %}
-        {% trans "已登录" %}: {{ user.username }} 
-        <a href="{% url 'auth_logout' %}">{% trans "登出" %}</a> | 
-        <a href="{% url 'auth_password_change' %}">{% trans "修改密码" %}</a> |
-        <a href="{% url 'info_view' %}">{% trans "修改个人信息" %}</a>
-    {% else %}
-       <a href="{% url 'auth_login' %}">{% trans "Log in" %}</a>
-    {% endif %}
-    <hr />
-    {% endblock %}
+    <div class="header_top">
+        <div class="container">
+            <div class="header_top-box">
+                <div class="cssmenu">
+                    <ul>
+                        {% if user.is_authenticated %}
+                        <li><a>Logged in as : {{ user.username }} </a></li>
+                        <li><a href="{% url 'info_view' %}">Profile</a></li>
+                        <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                        <li><a href="{% url 'auth_logout' %}">Log out</a></li>
+                        {% else %}
+                        <li class="active"><a href="{% url 'auth_login' %}">Log in</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
     </div>
+    <div class="header_bottom">
+        <div class="container">
+            <div class="header_bottom-box">
+                <div class="header_bottom_left">
+                    <div class="logo">
+                        <a href="{% url 'index' %}"><img src="/static/images/logo.png" alt=""/></a>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+                <!-- <div class="header_bottom_right">
+                    <div class="search">
+                        <input type="text" value="Your email address" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Your email address';}">
+                    <input type="submit" value="">
+                    </div>
+                    <ul class="bag">
+                        <a href="#"><i class="bag_left"> </i></a>
+                        <div class="clearfix"> </div>
+                    </ul>
+                </div> -->
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
 
     <div id="content">
     {% block content %}{% endblock %}
     </div>
 
-    <div id="footer">
     {% block footer %}
-        <hr />
+    <div class="footer">
+        <div class="container">
+            <ul class="footer_nav">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+            <p class="copy">Copyright &copy; 2015.Dixon Qin, Huanxiang Zhou and Kaki Shu. All rights reserved.</p>
+        </div>
+    </div>
     {% endblock %}
     </div>
 </body>

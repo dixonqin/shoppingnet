@@ -4,9 +4,11 @@
 <h2>店铺增添商品</h2>
 
 <hr>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
 {% csrf_token %}
+<section>
 	{{ form.as_p }}
 	<button type="submit" name = "submit">提交</button>
+</section>
 </form>
 {% endblock %}
