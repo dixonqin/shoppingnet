@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>商店列表</h2>
+
+{% if not user.is_shop %}
+<div>
+	<form method="POST">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" name = "submit">搜索</button>
+	</form>
+</div>
+{% endif %}
+
 <ul>
 	{% for shop in index_shop_List %}
 		<li> <a href="/{{shop.id}}/"> {{shop.name}} </a> </li>

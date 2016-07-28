@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from registration.forms import RegistrationForm
 from customauth.models import MyUser
-from shopping.models import Goods, Shop, Customer, OrderForm, Comment
+from shopping.models import Goods, Shop, Customer, OrderForm, Comment, Search
 from django.utils.translation import ugettext_lazy as _
 
 class MyCustomUserForm(RegistrationForm):
@@ -82,3 +82,8 @@ class CommentForm(forms.ModelForm):
 			'rating':_("评分"),
 			'content':_('评价'),
 		}
+
+class SearchForm(forms.ModelForm):
+	class Meta:
+		model = Search
+		fields = ['content', 'field_name', 'object_name']

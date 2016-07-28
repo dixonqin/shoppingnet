@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.conf import settings
-from datetime import datetime   
+from datetime import datetime
+from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 class Shop(models.Model):
@@ -62,6 +64,7 @@ class OrderForm(models.Model):
 	message = models.CharField(max_length = 200, default="")
 	address = models.CharField(max_length = 200, default="")
 	tele = models.IntegerField(default = 0)
+	#-1 表示是购物车
 	#1	下单 
 	#2	确认
 	#3	发货
@@ -70,3 +73,17 @@ class OrderForm(models.Model):
 
 	def __str__(self):
 		return self.user.customer.name
+
+class Search(models.Model):
+	OBJECTNAME_CHOICE = (
+		('商店','商店'),
+		('商品','商品'),
+	)
+	FIELDNAME_CHOICE = (
+		('名称','名称'),
+		('类别','类别'),
+	)
+
+	content = models.CharField(max_length = 20, default="")
+	object_name = models.CharField(max_length = 4, choices = OBJECTNAME_CHOICE, default = '商品')
+	field_name = models.CharField(max_length = 4, choices = FIELDNAME_CHOICE, default = '名称')

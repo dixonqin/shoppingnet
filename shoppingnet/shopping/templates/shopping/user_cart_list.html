@@ -15,3 +15,10 @@
 </ul>
 
 {% endblock %}
+
+{% block footer %}
+<form method="POST">
+{% csrf_token %}
+	<button type="submit" name = "buy">全部购买</button>
+</form>
+{% endblock %}

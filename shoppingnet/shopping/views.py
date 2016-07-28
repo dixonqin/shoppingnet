@@ -1,4 +1,4 @@
-from shopping.forms import GoodsForm, ManageGoodsForm, ShopInfoForm, CustomerForm, UserOrderForm
+from shopping.forms import GoodsForm, ManageGoodsForm, ShopInfoForm, CustomerForm, UserOrderForm, SearchForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from shopping.models import Goods, Shop, OrderForm, Comment, Customer
@@ -17,11 +17,49 @@ def HomePage(request):
 	if request.user.is_shop == True:
 		return HttpResponseRedirect('/shop/' + str(request.user.shop.id))
 
+	if request.method == "POST":
+		form = SearchForm(request.POST)
+		if form.is_valid():
+			temp = form.save(commit=False)
+			if temp.object_name == '商品' and temp.field_name == '名称':
+				goods_list = Goods.objects.filter(name__contains=temp.content)
+				return GoodsSearchResult(request, goods_list)
+			if temp.object_name == '商品' and temp.field_name == '类别':
+				goods_list = Goods.objects.filter(category__contains=temp.content)
+				return GoodsSearchResult(request, goods_list)
+			if temp.object_name == '商店' and temp.field_name == '名称':
+				shop_list = Shop.objects.filter(name__contains=temp.content)
+				return ShopSearchResult(request, shop_list)
+			if temp.object_name == '商店' and temp.field_name == '类别':
+				shop_list = Shop.objects.filter(category__contains=temp.content)
+				return ShopSearchResult(request, shop_list)
+	else:
+		form = SearchForm()
+	
 	index_shop_List = Shop.objects.order_by("id")
 	context = {
 		'index_shop_List' : index_shop_List,
+		'form': form,
+		'user': request.user,
 	}
 	return render(request, 'shopping/index.html', context)
+
+def GoodsSearchResult(request, goods_list):
+	if len(goods_list) == 0:
+		return render(request, 'shopping/search_not_found.html')
+	context = {
+		'goods_list' : goods_list,
+		'user' : request.user,
+	}
+	return render(request, 'shopping/search_goods.html', context)
+
+def ShopSearchResult(request, shop_list):
+	if len(shop_list) == 0:
+		return render(request, 'shopping/search_not_found.html')
+	context = {
+		'shop_list' : shop_list,
+	}
+	return render(request, 'shopping/search_shop.html', context)
 
 def CompleteUserInfo(request):
 	if request.method == "POST":
@@ -149,6 +187,12 @@ def AddGoods(request):
 	return render(request, "shopping/shop_add_goods.html", context)
 
 def UserShoppingCart(request):
+	user_cart = request.user.orderform_set.all().filter(status = -1)
+	if request.method == "POST":
+		if 'buy' in request.POST:
+			for order in user_cart:
+				order.status = 1
+				order.save()
 	user_cart = request.user.orderform_set.all().filter(status = -1)
 	context = {
 		"user_cart" : user_cart,

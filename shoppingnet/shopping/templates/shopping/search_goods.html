@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>商品搜索结果</h2>
+
+<ul>
+	{% for goods in goods_list %}
+		<li><p> 名称 {{goods.name}} </p></li>
+		<ul>
+			<li> 类别 {{goods.category }} </li>
+			<li> 描述 {{goods.description}} </li>
+			<li> <a href="/goods/{{goods.id}}"> 更多信息 </a> </li>
+		</ul>
+	{% endfor %}
+</ul>
+
+{% endblock %}
