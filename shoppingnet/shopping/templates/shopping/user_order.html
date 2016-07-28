@@ -21,15 +21,23 @@
 	{% endif %}
 	<p>联系方式: {{order.tele}} </p>
 	<p>地址: {{order.address}}</p>
+
 <form method="POST">
+{% csrf_token %}
+	{% if order.status == 1 %}
 	<button type="submit" name = "cancle">取消订单</button>
-	<button type="submit" name = "delete">删除订单</button>
+	{% endif %}
+	{% if order.status == 3 %}
 	<button type="submit" name = "confirm">确认收货</button>
+	{% endif %}
 </form>
+
+{% if order.status == 4 %}
 <form method="POST">
 {% csrf_token %}
 	{{comment.as_p}}
 	<button type="submit" name = "comment">评论</button>
 </form>
+{% endif %}
 
 {% endblock %}

@@ -9,6 +9,7 @@ class Shop(models.Model):
 	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='')
 	name = models.CharField(max_length = 30, default="")
 	description = models.CharField(max_length = 200, default="")
+	sold_number = models.IntegerField(default = 0)
 	category = models.CharField(max_length = 20, default="")
 	tele = models.CharField(max_length = 20, default="")
 	class Meta:
@@ -19,6 +20,7 @@ class Shop(models.Model):
 
 class Customer(models.Model):
 	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, default = '')
+	head_img = models.ImageField(upload_to = 'img', null=True, blank=True, default="img/no_image.png")
 	name = models.CharField(max_length = 20, default="")
 	address = models.CharField(max_length = 200, default="")
 	sex = models.CharField(max_length = 10, default="")
@@ -28,7 +30,7 @@ class Customer(models.Model):
 		return self.name
 
 class Goods(models.Model):
-	image = models.ImageField(upload_to = 'img', null=True, blank=True, default="img/no_image.png")
+	image = models.ImageField(upload_to = 'img', null=True, blank=True, default="img/no_img.jpg")
 	shop = models.ForeignKey(Shop, on_delete = models.CASCADE)
 	#以下商品信息，店主无法直接修改
 	name = models.CharField(max_length = 30)
@@ -38,8 +40,10 @@ class Goods(models.Model):
 	number = models.IntegerField(default = 0)
 	#以下信息，店主无法修改
 	sold_number = models.IntegerField(default = 0)
-	rating = models.IntegerField(default = 5, editable = 'false')
-	rating_number = models.IntegerField(default = 0, editable = 'false')
+	rating = models.IntegerField(default = 0)
+	rating_number = models.IntegerField(default = 0)
+	#
+	rating_total = models.IntegerField(default = 0)
 
 	def __str__(self):
 		return str(self.name)+'+'+str(self.id)
@@ -47,7 +51,8 @@ class Goods(models.Model):
 class OrderForm(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
 	goods = models.ForeignKey(Goods, on_delete = models.CASCADE)
-
+	#
+	total_price = models.IntegerField(default = 0)
 	number = models.IntegerField(default = 0)
 	message = models.CharField(max_length = 200, default="")
 	address = models.CharField(max_length = 200, default="")
