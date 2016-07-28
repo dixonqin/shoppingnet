@@ -1,4 +1,4 @@
-from shopping.forms import GoodsForm, ManageGoodsForm, ShopInfoForm, CustomerForm, UserOrderForm, SearchForm, ReplyForm, CommentForm
+from shopping.forms import GoodsForm, ManageGoodsForm, ShopInfoForm, CustomerForm, UserOrderForm, SearchForm, CommentForm, ReplyForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from shopping.models import Goods, Shop, OrderForm, Comment, Customer, Reply
@@ -164,10 +164,7 @@ def GoodsDetail(request, goods_id):
 				of.save()
 				return HttpResponseRedirect('/cart/')
 			if 'viewComment' in request.POST:
-				context = {
-					'goods': goods,
-				}
-				return render(request, 'shopping/comment.html', context)
+				return HttpResponseRedirect('/goods')
 	else:
 		form = UserOrderForm()
 
@@ -191,8 +188,10 @@ def ManageGoods(request, goods_id):
 				goods.delete()
 				return HttpResponseRedirect('/shop/'+str(shop_id)+'/')
 			if 'save' in request.POST:
+
 				form.save()
 				form = ManageGoodsForm(instance= goods)
+
 				message = '成功修改！'
 	else:
 		form = ManageGoodsForm(instance = goods)
@@ -214,6 +213,10 @@ def AddGoods(request):
 				temp = Goods()
 				temp = form.save(commit=False)
 				temp.shop = request.user.shop
+				temp.rating = 0
+				temp.rating_number = 0
+				temp.rating_total = 0
+				temp.sold_number = 0
 				temp.save()
 				return HttpResponseRedirect('/')
 	else:
@@ -295,6 +298,8 @@ def UserOrderFormDetail(request, order_id):
 			comm = com.save(commit=False)
 			comm.user = request.user
 			comm.order = order
+			comm.goods = order.goods
+			comm.isReplied = False
 			if comm.rating > 5:#分数大于5时，取5
 				comm.rating = 5
 			if comm.rating < 0:#分数小于0时，取0
@@ -302,24 +307,20 @@ def UserOrderFormDetail(request, order_id):
 			order.goods.rating_total += comm.rating
 			order.goods.rating_number += 1
 			order.goods.rating = order.goods.rating_total / order.goods.rating_number
-			#comm.save()
+			order.goods.save()
 			order.status = 5
 			order.save()
+			comm.save()
 			context={
 				'goods': order.goods,
 			}
-			return render(request, 'shopping/comment.html', context)
+			return render(request, 'shopping/goods.html', context)
 	context = {
 		"order" : order,
 		'message' : message,
 		'comment': com, 
 	}
 	return render(request, 'shopping/user_order.html', context)
-
-def CommentView(request):
-	if not request.user.is_authenticated():
-		return HttpResponseRedirect('/')
-	return HttpResponseRedirect('/')
 
 def ShopOrder(request):
 	if not request.user.is_authenticated():
@@ -336,6 +337,7 @@ def ShopOrderFormDetail(request, order_id):
 	order = OrderForm.objects.get(pk = order_id)
 	message = '请进行操作'
 	form = CommentForm(request.POST)
+	repForm = ReplyForm(request.POST)
 	if request.method == 'POST':
 		if 'confirm' in request.POST and order.status == 1:
 			order.status = 2
@@ -345,22 +347,22 @@ def ShopOrderFormDetail(request, order_id):
 			order.status = 3
 			order.save()
 			message = '成功发货'
-		if 'reply' in request.POST and order.status == 5:
-			repForm = ReplyForm(request.POST)
+		if 'reply' in request.POST:
 			rep = Reply()
-			rep = repForm.save(commit=false)
+			rep = repForm.save(commit=False)
 			if rep.rating > 5:#分数大于5时，取5
 				rep.rating = 5
 			if rep.rating < 0:#分数小于0时，取0
 				rep.rating = 0
-			rep.save()
-			order.comment.reply = rep
 			order.comment.isReplied = True
 			order.comment.save()
+			rep.comment = order.comment
+			rep.save()
 
 	context = {
         'order': order,
         'message' : message,
+        'replyForm': repForm,
 	}
 	return render(request, 'shopping/shop_order.html', context)
 

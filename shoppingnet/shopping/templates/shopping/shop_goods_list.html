@@ -10,11 +10,14 @@
 
 <ul>
 	{% for goods in shop.goods_set.all %}
+	<section>
 		<li>
 		<img src="{{goods.image.url}}" width="100px" height="100px">
 		<a href="/shop/goods/{{goods.id}}/">
 			{{goods.name}}
 		</a></li>
+	</section>
+	<hr />
 	{% endfor %}
 </ul>
 {% endblock %}

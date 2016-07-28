@@ -6,8 +6,10 @@
 <p>销量: {{user.shop.sold_number}}</p>
 
 <form method="POST">
+<section>
 {% csrf_token %}
 	{{ form.as_p }}
 	<button type="submit" name = "submit">提交</button>
+</section>
 </form>
 {% endblock %}

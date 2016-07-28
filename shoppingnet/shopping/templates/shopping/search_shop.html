@@ -4,12 +4,15 @@
 
 <ul>
 	{% for shop in shop_list %}
+	<section>
 		<p> 名称 {{shop.name}} </p>
 		<ul>
 			<li> 类别 {{shop.category }} </li>
 			<li> 描述 {{shop.description}} </li>
 			<li><a href="/{{shop.id}}"> 更多信息 </a></li>
 		</ul>
+	</section>
+	<hr />
 	{% endfor %}
 </ul>
 {% endblock %}

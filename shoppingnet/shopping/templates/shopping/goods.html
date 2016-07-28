@@ -2,10 +2,14 @@
 {% block content %}
 
 <h2>购买页面</h2>
+<section>
 <img src="{{goods.image.url}}" width="100px" height="100px">
 <p>名称 {{goods.name}} </p>
 <p>价格 {{goods.price}} </p>
 <p>评分 {{goods.rating}}</p>
+<p>库存 {{goods.number}}</p>
+<p>销量 {{goods.sold_number}}</p>
+<p>描述 {{goods.description}}</p>
 
 <hr>
 <form method="POST">
@@ -13,6 +17,28 @@
 	{{ form.as_p }}
 	<button type="submit" name = "buy">购买</button>
 	<button type="submit" name = "collect">加入购物车</button>
-	<button type="submit" name = "viewComment">查看评价</button>
+
 </form>
+</section>
+<hr>
+<h4>评论列表: </h4>
+{% for co in goods.comment_set.all%}
+	<section>
+	<img src="{{co.user.customer.head_img.url}}" width="100px" height="100px">
+	<p>用户: {{co.user.customer.name}}</p>
+	<p>评分: {{co.rating}}</p>
+	<p>评论内容: {{co.content}}</p>
+	<p>日期: {{co.date}}</p>
+	{% if co.isReplied %}
+		{% for reply in co.reply_set.all%}
+		<br><p>商家回复: </p>
+		<p>评分: {{reply.rating}}</p>
+		<p>回复内容: {{reply.content}}</p>
+		<p>日期: {{reply.date}}</p>
+		{% endfor %}
+	{% endif %}
+	</section>
+	<hr />
+{% endfor %}
+
 {% endblock %}
