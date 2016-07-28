@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 class Shop(models.Model):
 	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='')
 	name = models.CharField(max_length = 30, default="")
-	description = models.CharField(max_length = 200, default="")
+	description = models.TextField(max_length = 300)
 	sold_number = models.IntegerField(default = 0)
 	category = models.CharField(max_length = 20, default="")
 	tele = models.CharField(max_length = 20, default="")
@@ -24,7 +24,7 @@ class Customer(models.Model):
 	name = models.CharField(max_length = 20, default="")
 	address = models.CharField(max_length = 200, default="")
 	sex = models.CharField(max_length = 10, default="")
-	self_intro = models.CharField(max_length = 300, default="")
+	self_intro = models.TextField(max_length = 300)
 	tele = models.CharField(max_length = 20, default="")
 	def __str__(self):
 		return self.name
@@ -35,7 +35,7 @@ class Goods(models.Model):
 	#以下商品信息，店主无法直接修改
 	name = models.CharField(max_length = 30)
 	category = models.CharField(max_length = 20, default="")
-	description = models.CharField(max_length = 200, default="")
+	description = models.TextField(max_length = 300)
 	price = models.IntegerField(default = 0)
 	number = models.IntegerField(default = 0)
 	#以下信息，店主无法修改
@@ -51,17 +51,17 @@ class Goods(models.Model):
 class OrderForm(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
 	goods = models.ForeignKey(Goods, on_delete = models.CASCADE)
-	#
 	total_price = models.IntegerField(default = 0)
 	number = models.IntegerField(default = 0)
 	message = models.CharField(max_length = 200, default="")
-	address = models.CharField(max_length = 200, default="")
+	address = models.TextField(max_length = 300)
 	tele = models.CharField(max_length = 20, default="")
 	#-1 表示是购物车
 	#1	下单 
 	#2	确认
 	#3	发货
 	#4	收货
+	#5  完成
 	status = models.IntegerField(default = 0)
 
 	def __str__(self):
@@ -88,15 +88,16 @@ class Comment(models.Model):
 	rating = models.IntegerField(default = 0)
 	content = models.TextField(max_length = 300)
 	date = models.DateTimeField(default = datetime.now)
-	isReplied = models.BooleanField(default = 'false')
+	isReplied = models.BooleanField(default = 'False')
 
 	def __str__(self):
 		return self.content
 
 class Reply(models.Model):
-	comment = models.OneToOneField(Comment, on_delete = models.CASCADE, default='')
+	comment = models.ForeignKey(Comment, on_delete = models.CASCADE, default='')
 	rating = models.IntegerField(default = 0)
 	content = models.TextField(max_length = 300)
 	date = models.DateTimeField(default = datetime.now)
+
 	def __str__(self):
 		return self.content

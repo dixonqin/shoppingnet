@@ -16,7 +16,7 @@ class GoodsForm(forms.Form):
 class ManageGoodsForm(forms.ModelForm):
 	class Meta:
 		model = Goods
-		exclude = ['shop']
+		exclude = ['shop', 'rating','rating_number', 'rating_total', 'sold_number']
 		labels = {
 			'name':_("名称"),
 			'category':_("类别"),
@@ -24,23 +24,11 @@ class ManageGoodsForm(forms.ModelForm):
 			'price':_("价格"),
 			'number':_("数量"),
 		}
-		# help_texts = {
-		# 	'name':_("名称"),
-		# 	'category':_(""),
-		# 	'description':_(""),
-		# 	'price':_(""),
-		# 	'number':_(""),
-		# 	'rating':_(""),
-		# 	'rating_numbera':_(""),
-		# }
-		# error_messages = {
-
-		# }
 
 class ShopInfoForm(forms.ModelForm):
 	class Meta:
 		model = Shop
-		exclude = ['user',]
+		exclude = ['user','sold']
 		labels = {
 			'name':_("名称"),
 			'category':_("类别"),
@@ -64,7 +52,7 @@ class CustomerForm(forms.ModelForm):
 class UserOrderForm(forms.ModelForm):
 	class Meta:
 		model = OrderForm
-		fields = ['number', 'message', 'tele', 'address', ]
+		fields = ['number', 'message', 'tele', 'address']
 		labels = {
 			'number':_("数量"),
 			'message':_("附加信息"),
@@ -75,19 +63,19 @@ class UserOrderForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
 	class Meta:
 		model = Comment
-		fields = ['rating', 'content',]
+		fields = ['rating', 'content']
 		labels = {
 			'rating':_("评分"),
-			'content':_('评价'),
+			'content':_("评论"),
 		}
 
 class ReplyForm(forms.ModelForm):
 	class Meta:
 		model = Reply
-		fields = ['rating', 'content',]
+		fields = ['rating', 'content']
 		labels = {
 			'rating':_("评分"),
-			'content':_('回复内容'),
+			'content':_("回复内容"),
 		}
 
 class SearchForm(forms.ModelForm):
