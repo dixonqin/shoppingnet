@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>goods page</h2>
-
-<p>name: {{goods.name}} </p>
-<p>price: {{goods.price}} </p>
+<h2>购买页面</h2>
+<img src="{{goods.image.url}}" width="100px" height="100px">
+<p>名称 {{goods.name}} </p>
+<p>价格 {{goods.price}} </p>
 <hr>
 <form method="POST">
 {% csrf_token %}
-	<input type="text" name="number">
-	<button type="submit" name = "buy">buy</button>
-	<button type="submit" name = "collect">collect</button>
+	{{ form.as_p }}
+	<button type="submit" name = "buy">购买</button>
+	<button type="submit" name = "collect">加入购物车</button>
+	<button type="submit" name = "viewComment">查看评价</button>
 </form>
 {% endblock %}

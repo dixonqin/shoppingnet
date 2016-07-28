@@ -1,14 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>comment page</h2>
-<p>goods: {{comment.goods.name}} </p>
-<ul>
-	{% for comment in goods_comment_list.comment_set.all %}
-		<p>user: {{comment.user.name}} </p>
-		<p>rating: {{comment.rating}}</p>
-		<p>comment: {{comment.content}}</p>
-	{% endfor %}
-</ul>
+{% for co in goods.comment_set.all%}
+	<img src="{{co.user.customer.head_img.url}}" width="100px" height="100px">
+	<p>用户: {{co.user.customer.name}}</p>
+	<p>评分: {{co.rating}}</p>
+	<p>评论内容: {{co.content}}</p>
+	<p>日期: {{co.date}}</p>
+	{% if co.isRpeplied %}
+		<br><p>商家回复: </p>
+		<p>评分: {{co.reply.rating}}</p>
+		<p>回复内容: {{co.reply.content}}</p>
+		<p>日期: {{co.reply.date}}</p>
+	{% endif %}
+	<hr />
+{% endfor %}
 
 {% endblock %}

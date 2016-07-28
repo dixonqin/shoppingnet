@@ -129,5 +129,6 @@ LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'customauth.MyUser'
 
-#MEDIA_URL = '/media/'
-#MEDIA_ROOT = '/media/'
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

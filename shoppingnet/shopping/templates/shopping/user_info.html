@@ -2,9 +2,15 @@
 {% block content %}
 
 <h2>用户信息完善</h2>
-
+<p>头像: </p><img src="{{user.customer.head_img.url}}" width="100px" height="100px">
+	<p>姓名: {{user.customer.name}}</p>
+	<p>email: {{user.email}}</p>
+	<p>性别: {{user.customer.sex}}</p>
+	<p>联系方式: {{user.customer.tele}}</p>
+	<p>地址: {{user.customer.address}}</p>
+	<p>个人简介: {{user.customer.self_intro}}</p>
 <hr>
-<form method="POST">
+<form method="POST"  enctype="multipart/form-data">
 {% csrf_token %}
 	{{ form.as_p }}
 	<button type="submit" name = "submit">提交</button>
