@@ -1,38 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>form order {{order.id}} page</h2>
-
-<p>商品名称: {{order.goods.name}} </p>
-<p>数量: {{order.number}} </p>
-<p>卖家: {{order.goods.shop.name}}</p>
-<p>收货地址: {{order.address}}</p>
-<p>联系方式: {{order.tel}}</p>
-{% if order.status == 1 %}
-	<p>{% trans "status: 已下单" %}</p>
-
-{% elif order.status == 2 %}
-	<p>{% trans "status: 已确认订单" %}</p>
-
-{% elif order.status == 3 %}
-	<p>{% trans "status: 已发货" %}</p>
-
-{% elif order.status == 4 %}
-	<p>{% trans "status: 已确认收货"%}</p>
-{% endif %}
-<p>留言: {{order.message}}</p>
+<h2>订单管理</h2>
+	<img src="{{order.goods.image.url}}" width="100px" height="100px">
+	<p>商品: {{order.goods.name}} </p>
+	<p>店铺: {{order.goods.shop.name}} </p>
+	<p>数量: {{order.number}} </p>
+	{% if order.status == 1 %}
+		<p>状态: 已下单 </p>
+	{% elif order.status == 2 %}
+		<p>状态: 商家已确认 </p>
+	{% elif order.status == 3 %}
+		<p>状态: 商家已发货 </p>
+	{% elif order.status == 4 %}
+		<p>状态: 已确认收货 </p>
+	{% elif order.status == 5 %}
+		<p>状态: 已完成 </p>
+	{% else %}
+		<p>状态: 已取消 </p>
+	{% endif %}
+	<p>联系方式: {{order.tele}} </p>
+	<p>地址: {{order.address}}</p>
+<form method="POST">
+	<button type="submit" name = "cancle">取消订单</button>
+	<button type="submit" name = "delete">删除订单</button>
+	<button type="submit" name = "confirm">确认收货</button>
+</form>
 <form method="POST">
 {% csrf_token %}
-	<button type="submit" name = "delete">删除</button>
-	{% if order.status == 3 %}
-		<button type="submit" name = "comfirm">{% trans "status: 确认收货"%}</button>
-	{% endif %}
-	<hr/>
-	{% if order.status == 4 %}
-	(<input type="text" name="rating">
-	<input type="text" name="content">
-	<button type="submit" name = "comment">{% trans "评价" %}</button>)
-	{% endif %}
+	{{comment.as_p}}
+	<button type="submit" name = "comment">评论</button>
 </form>
 
 {% endblock %}

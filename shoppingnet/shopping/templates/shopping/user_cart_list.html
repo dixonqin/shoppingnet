@@ -4,13 +4,21 @@
 <h2>the shopping cart of {{user_cart.username}}</h2>
 
 <ul>
-	{% for cart in user_cart.shoppingcart_set.all %}
+	{% for order in user_cart %}
 	<li>
-		<a href= "{{cart.id}} " > goods: {{cart.goods.name}} </a>
-		<p>number: {{cart.number}} </p>
-		<p>shop: {{cart.goods.shop.name}} </p>
+		<p>商品: {{order.goods.name}} </p>
+		<p>店铺: {{order.goods.shop.name}} </p>
+		<p>状态: {{order.status}} </p>
+		<a href="{{order.id}}">更多信息</a>
 	</li>
 	{% endfor %}
 </ul>
 
+{% endblock %}
+
+{% block footer %}
+<form method="POST">
+{% csrf_token %}
+	<button type="submit" name = "buy">全部购买</button>
+</form>
 {% endblock %}

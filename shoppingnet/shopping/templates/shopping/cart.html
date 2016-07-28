@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>shopping cart {{cart.id}} page</h2>
-
-<p>goods: {{cart.goods.name}} </p>
-<p>number: {{cart.number}} </p>
+<h2>购物车详情</h2>
+	<img src="{{order.goods.image.url}}" width="100px" height="100px">
+	<p>商品: {{order.goods.name}} </p>
+	<p>店铺: {{order.goods.shop.name}} </p>
+	<p>数量: {{order.number}} </p>
+	<p>联系方式: {{order.tele}} </p>
+	<p>地址: {{order.address}}</p>
 
 <form method="POST">
 {% csrf_token %}

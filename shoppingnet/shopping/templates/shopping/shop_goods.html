@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>店铺商品管理</h2>
+
+<hr>
+<p> {{message}} </p>
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit" name = "delete">删除</button>
+	<button type="submit" name = "save">保存</button>
+</form>
+{% endblock %}

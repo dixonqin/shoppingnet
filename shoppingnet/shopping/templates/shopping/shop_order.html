@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>店铺订单管理</h2>
+	
+	<p>商品: {{order.goods.name}} </p>
+	<p>店铺: {{order.goods.shop.name}} </p>
+	<p>数量: {{order.number}} </p>
+	{% if order.status == 1 %}
+		<p>状态: 已下单 </p>
+	{% elif order.status == 2 %}
+		<p>状态: 商家已确认 </p>
+	{% elif order.status == 3 %}
+		<p>状态: 商家已发货 </p>
+	{% elif order.status == 4 %}
+		<p>状态: 已确认收货 </p>
+	{% elif order.status == 5 %}
+		<p>状态: 已完成 </p>
+	{% else %}
+		<p>状态: 已取消 </p>
+	{% endif %}
+	<p>买家: {{order.user.customer.name}} </p>
+	<p>联系方式: {{order.tele}} </p>
+	<p>地址: {{order.address}}</p>
+	{% if order.status == 5 %}
+		<p>用户评分: {{order.comment.rating}}</p>
+		<p>用户评论: {{order.comment.content}}</p>
+	{% endif %}
+<hr>
+<p> {{message}} </p>
+<form method="POST">
+{% csrf_token %}
+	<button type="submit" name = "confirm">确定订单</button>
+	<button type="submit" name = "delivery">已发货</button>
+	<br>
+	{% if order.status == 5 and order.comment.isReplied == False%}
+		{{ replyForm.as_p }}
+		<button type="submit" name = "reply">回复</button>
+	{% endif %}
+</form>
+
+{% endblock %}

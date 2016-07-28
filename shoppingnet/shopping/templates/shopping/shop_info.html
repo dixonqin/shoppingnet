@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>店铺信息完善</h2>
-
+<h2>店铺信息</h2>
+	<p>店铺名: {{user.shop.name}}</p><br>
+	<p>email: {{user.email}}</p><br>
+	<p>评分: {{user.shop.rating}}</p><br>
+	<p>类别: {{user.shop.category}}</p><br>
+	<p>联系电话: {{user.shop.tele}}</p><br>
+	<p>地址: {{user.shop.address}}</p><br>
+	<p>描述: {{user.shop.description}}</p><br>
 <hr>
 <form method="POST">
 {% csrf_token %}

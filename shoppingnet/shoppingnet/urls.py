@@ -17,6 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from registration.backends.simple.views import RegistrationView
 from shopping.forms import MyCustomUserForm
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
@@ -30,4 +32,4 @@ urlpatterns = [
     ),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'', include('shopping.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

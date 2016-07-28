@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.conf import settings
+from datetime import datetime
+from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 class Shop(models.Model):
@@ -7,9 +10,7 @@ class Shop(models.Model):
 	name = models.CharField(max_length = 30, default="")
 	description = models.CharField(max_length = 200, default="")
 	category = models.CharField(max_length = 20, default="")
-	#location = models.CharField(max_length = 100, default="")
-	address = models.CharField(max_length = 200, default="")
-
+	tele = models.CharField(max_length = 20, default="")
 	class Meta:
 		ordering = ["-name"]
 
@@ -21,18 +22,16 @@ class Customer(models.Model):
 	name = models.CharField(max_length = 20, default="")
 	address = models.CharField(max_length = 200, default="")
 	sex = models.CharField(max_length = 10, default="")
-	tel = models.CharField(max_length = 20, default = "")
-	#head_img = models.ImageField(upload_to = 'img', null=True, blank=True)
 	self_intro = models.CharField(max_length = 300, default="")
-
+	tele = models.CharField(max_length = 20, default="")
 	def __str__(self):
 		return self.name
 
-
 class Goods(models.Model):
-	shop = models.ForeignKey(Shop, on_delete = models.CASCADE, default = '')
+	image = models.ImageField(upload_to = 'img', null=True, blank=True, default="img/no_image.png")
+	shop = models.ForeignKey(Shop, on_delete = models.CASCADE)
 	#以下商品信息，店主无法直接修改
-	name = models.CharField(max_length = 30, default = "")
+	name = models.CharField(max_length = 30)
 	category = models.CharField(max_length = 20, default="")
 	description = models.CharField(max_length = 200, default="")
 	price = models.IntegerField(default = 0)
@@ -45,29 +44,54 @@ class Goods(models.Model):
 	def __str__(self):
 		return str(self.name)+'+'+str(self.id)
 
+class OrderForm(models.Model):
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+	goods = models.ForeignKey(Goods, on_delete = models.CASCADE)
+
+	number = models.IntegerField(default = 0)
+	message = models.CharField(max_length = 200, default="")
+	address = models.CharField(max_length = 200, default="")
+	tele = models.CharField(max_length = 20, default="")
+	#-1 表示是购物车
+	#1	下单 
+	#2	确认
+	#3	发货
+	#4	收货
+	status = models.IntegerField(default = 0)
+
+	def __str__(self):
+		return self.user.customer.name
+
+class Search(models.Model):
+	OBJECTNAME_CHOICE = (
+		('商店','商店'),
+		('商品','商品'),
+	)
+	FIELDNAME_CHOICE = (
+		('名称','名称'),
+		('类别','类别'),
+	)
+
+	content = models.CharField(max_length = 20, default="")
+	object_name = models.CharField(max_length = 4, choices = OBJECTNAME_CHOICE, default = '商品')
+	field_name = models.CharField(max_length = 4, choices = FIELDNAME_CHOICE, default = '名称')
+
 class Comment(models.Model):
+	order =  models.OneToOneField(OrderForm, on_delete = models.CASCADE, default='')
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, default='')
+	goods = models.ForeignKey(Goods, on_delete = models.CASCADE, default='')
 	rating = models.IntegerField(default = 0)
-	content = models.TextField(max_length = 200, default = "")
-	customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, default = '')
-	goods = models.ForeignKey(Goods, on_delete = models.CASCADE, default = '')
+	content = models.TextField(max_length = 300)
+	date = models.DateTimeField(default = datetime.now)
+	isReplied = models.BooleanField(default = 'false')
 
 	def __str__(self):
 		return self.content
 
-class ShoppingCart(models.Model):
-	number = models.IntegerField(default = 0)
-	customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, default = "")
-	goods = models.ForeignKey(Goods, on_delete = models.CASCADE, default = "")
-
-class OrderForm(models.Model):
-	status = models.IntegerField(default = 0)#1是下单，2是确认，3是发货，4是收货
-	number = models.IntegerField(default = 0)
-	customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, default="")
-	goods = models.ForeignKey(Goods, on_delete = models.CASCADE, default = "")
-	message = models.CharField(max_length = 200, default = "")
-	tel = models.CharField(max_length = 20, default = "")
-	address = models.CharField(max_length = 100, default = "")
-
+class Reply(models.Model):
+	comment = models.OneToOneField(Comment, on_delete = models.CASCADE, default='')
+	rating = models.IntegerField(default = 0)
+	content = models.TextField(max_length = 300)
+	date = models.DateTimeField(default = datetime.now)
 	def __str__(self):
-		return self.customer.name
-
+		return self.content
